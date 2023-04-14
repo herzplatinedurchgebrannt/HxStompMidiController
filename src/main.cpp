@@ -36,7 +36,27 @@ unsigned long timerCurrent[3]      = {0,0,0};                 // current time
 unsigned long timerButtonPressed[3]= {0,0,0};                 // a timer to check how long a button was pressed
 
 
-
+void startAnimation()
+{
+  digitalWrite(LEDPAGE_1, HIGH);
+  delay(500);
+  digitalWrite(LEDPAGE_1, LOW);
+  digitalWrite(LEDPAGE_2, HIGH);
+  delay(500);
+  digitalWrite(LEDPAGE_2, LOW);
+  digitalWrite(LEDPAGE_3, HIGH);
+  delay(500);
+  digitalWrite(LEDPAGE_3, LOW);
+  digitalWrite(LEDPAGE_1, HIGH);
+  delay(500);
+  digitalWrite(LEDPAGE_1, LOW);
+  digitalWrite(LEDPAGE_2, HIGH);
+  delay(500);
+  digitalWrite(LEDPAGE_2, LOW);
+  digitalWrite(LEDPAGE_3, HIGH);
+  delay(500);
+  digitalWrite(LEDPAGE_3, LOW);
+}
 
 void changePage()
 {
@@ -90,6 +110,30 @@ void changePage()
       break;
       
     case 2:
+      // preset up
+      statusByte  [0] = 176;
+      dataByte    [0] = 72;
+      dataByte2   [0] = 127;
+  
+      // preset down
+      statusByte  [1] = 176;
+      dataByte    [1] = 72;
+      dataByte2   [1] = 0;
+  
+      // snapshot 3
+      statusByte  [2] = 176;
+      dataByte    [2] = 69;
+      dataByte2   [2] = 2;
+      
+      digitalWrite(LEDPAGE_1,  LOW);
+      digitalWrite(LEDPAGE_2,  LOW);
+      digitalWrite(LEDPAGE_3, HIGH);
+  
+      //update EEPROM w. current page
+      EEPROM.update(0, page);
+      break;
+
+    case 3:
       // snapshot 1
       statusByte  [0] = 176;
       dataByte    [0] = 69;
@@ -138,7 +182,11 @@ void setup()
   if (page < 0 || page > 2){
     page = 0;
   }
+
+  startAnimation();
   changePage();
+
+
 }
 
 void loop() 
